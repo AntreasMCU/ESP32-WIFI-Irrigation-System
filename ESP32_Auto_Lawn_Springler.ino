@@ -10,6 +10,7 @@ struct tm time_now;
 
 String header;
 
+//change output pin to the pin that you have connected the relay
 const int BuildIn_led = 2;
 
 int water_duration = 25;
