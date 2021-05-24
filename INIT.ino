@@ -37,6 +37,8 @@ void time_init(){
       last_watering_date = time_now;
       retry_token = false;
     }
+
+    //if we have not NTP time retry to connect
     if(mktime(&time_now) < 10000){
       Serial.println(&time_now, "%A, %B %d %Y %H:%M:%S"); 
       retry_token = true;
