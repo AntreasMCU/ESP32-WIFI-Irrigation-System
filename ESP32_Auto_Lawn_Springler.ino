@@ -2,8 +2,8 @@
 #include <ESPmDNS.h>
 #include <time.h>
 
-const char* WIFI_NAME= "NOULA1"; 
-const char* WIFI_PASSWORD = "2741301248"; 
+const char* WIFI_NAME= "******"; 
+const char* WIFI_PASSWORD = "*********"; 
 WiFiServer server(80);
 
 struct tm time_now;

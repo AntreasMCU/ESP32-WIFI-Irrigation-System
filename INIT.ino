@@ -11,7 +11,7 @@ void wifi_connect(){
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (!MDNS.begin("sis")) {
+  if (!MDNS.begin("sis")) {   //Smart Irrigation System
       while(1) {
         Serial.println("Error setting up MDNS responder!");\
         digitalWrite(BuildIn_led, !digitalRead(BuildIn_led));
