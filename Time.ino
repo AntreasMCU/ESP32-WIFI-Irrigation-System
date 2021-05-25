@@ -20,12 +20,14 @@ void time_refresh(){
 /************************************************************/
 
 void time_sync(){
-  
+
+  //Every TIME_CONFIG_DELAY (1H) refresh clock from NTPServer
   if(millis() - last_time_config > TIME_CONFIG_DELAY){
     last_time_config += TIME_CONFIG_DELAY;
     time_refresh();
   }
 
+  //Every TIME_CHECKCON_DELAY (10s) check if there is a WIFI Connection
   if(millis() - last_time_checkcon > TIME_CHECKCON_DELAY){
     last_time_checkcon += TIME_CONFIG_DELAY;
     if(WiFi.status() != WL_CONNECTED){
@@ -33,6 +35,7 @@ void time_sync(){
     }
   }
 
+  //Every TIME_ROUTINE_DELAY (1s) check for watering routine (open/close pump)
   if(millis() - last_time_routine > TIME_ROUTINE_DELAY){
     last_time_routine += TIME_ROUTINE_DELAY;
       
@@ -58,14 +61,14 @@ void check_next_watering(){
   next_watering_timestamp = mktime(&next_watering) + 86400*days_delay;
   if(next_watering_timestamp - timestamp < 0){
     last_watering_date = time_now;
-    digitalWrite(BuildIn_led, HIGH);
+    digitalWrite(watering_pin, HIGH);
     watering_token = true;
     Serial.println("Watering is on!");
   }
 
   if(watering_token){
     if(timestamp - mktime(&last_watering_date) > water_duration*60){
-      digitalWrite(BuildIn_led, LOW);
+      digitalWrite(watering_pin, LOW);
       watering_token = false;  
     }
   }

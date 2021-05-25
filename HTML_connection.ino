@@ -1,3 +1,6 @@
+String header;
+
+
 void HTML_connection(){
   Serial.println("New Client is requesting web page"); 
     String current_data_line = ""; 
@@ -19,20 +22,21 @@ void HTML_connection(){
             client.println("Connection: close");
             client.println();
 
-                        
-            if (header.indexOf("LED=ON HTTP") != -1) 
+            //if there is the string "PUMP=ON HTTP" on URL turn the pump on           
+            if (header.indexOf("PUMP=ON HTTP") != -1) 
             {
-              Serial.println("LED is ON");
-              digitalWrite(BuildIn_led, HIGH);
-            }
-            else
-              Serial.println("No Led is ON");
-            if (header.indexOf("LED=OFF HTTP") != -1) 
-            {
-              Serial.println("LED is OFF");
-              digitalWrite(BuildIn_led, LOW);
+              Serial.println("PUMP is ON");
+              digitalWrite(watering_pin, HIGH);
             }
             
+            //if there is the string "PUMP=OFF HTTP" on URL turn the pump off
+            if (header.indexOf("PUMP=OFF HTTP") != -1) 
+            {
+              Serial.println("PUMP is OFF");
+              digitalWrite(watering_pin, LOW);
+            }
+
+            //if there is the string "r=" on URL and then followed by number, add this value to water_duration
             temp_index = header.indexOf("r=");
             if (temp_index != -1){
               temp_index += 2;
@@ -45,6 +49,7 @@ void HTML_connection(){
               Serial.println(temp_number);
             }
 
+            //if there is the string "-t=" on URL and then followed by number, add this value to watering_hour and watering_minutes. Time format: HH:MM, 23h
             temp_index = header.indexOf("-t=");
             if (temp_index != -1){
               temp_index += 3;
@@ -67,6 +72,7 @@ void HTML_connection(){
               Serial.println(watering_minutes);
             }
 
+             //if there is the string "r=" on URL and then followed by number, add this value to days_delay
             temp_index = header.indexOf("del=");
             if (temp_index != -1){
               temp_index += 4;
