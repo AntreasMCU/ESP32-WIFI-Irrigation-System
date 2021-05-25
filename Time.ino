@@ -1,5 +1,6 @@
 #define TIME_CONFIG_DELAY     3600000
 #define TIME_ROUTINE_DELAY    1000
+#define TIME_CHECKCON_DELAY   10000
 
 const char* ntpServer = "pool.ntp.org";
 const long  gmtOffset_sec = 7200;
@@ -8,6 +9,7 @@ bool watering_token = false;
 
 unsigned long last_time_config = 0;
 unsigned long last_time_routine = 0;
+unsigned long last_time_checkcon = 0;
 
 /************************************************************/
 
@@ -22,6 +24,13 @@ void time_sync(){
   if(millis() - last_time_config > TIME_CONFIG_DELAY){
     last_time_config += TIME_CONFIG_DELAY;
     time_refresh();
+  }
+
+  if(millis() - last_time_checkcon > TIME_CHECKCON_DELAY){
+    last_time_checkcon += TIME_CONFIG_DELAY;
+    if(WiFi.status() != WL_CONNECTED){
+      wifi_connect();
+    }
   }
 
   if(millis() - last_time_routine > TIME_ROUTINE_DELAY){
